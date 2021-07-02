@@ -40,10 +40,7 @@ public class VisitFacade implements Aggregate {
     //--------- Handle Commands -------------
 
     void handle(OpenVisit c) {
-        VisitOpened visitOpened = new VisitOpened(
-                c.getId(),
-                c.getTableNumber(),
-                c.getWaiter());
+        VisitOpened visitOpened = new VisitOpened(c.getId(), c.getTableNumber(), c.getWaiter());
 
         domainEventPublisher.publish(visitOpened);
         apply(visitOpened);
@@ -57,22 +54,17 @@ public class VisitFacade implements Aggregate {
                 .collect(Collectors.toList());
 
         if (!drinks.isEmpty()) {
-            DrinksOrdered drinksOrdered = new DrinksOrdered(
-                    c.getId(),
-                    drinks);
+            DrinksOrdered drinksOrdered = new DrinksOrdered(c.getId(), drinks);
             domainEventPublisher.publish(drinksOrdered);
-            // TODO apply
         }
 
-        List<OrderItem> food = c.getItems().stream()
+        List<OrderItem> food = c.getItems()
+                .stream()
                 .filter(item -> !item.isDrink())
                 .collect(Collectors.toList());
         if (!food.isEmpty()) {
-            FoodOrdered foodOrdered = new FoodOrdered(
-                    c.getId(),
-                    food);
+            FoodOrdered foodOrdered = new FoodOrdered(c.getId(), food);
             domainEventPublisher.publish(foodOrdered);
-            // TODO apply
         }
     }
 
@@ -82,9 +74,7 @@ public class VisitFacade implements Aggregate {
         }
 
         DrinksServed drinksServed = new DrinksServed(c.getVisitId(), c.getMenuNumbers());
-
         domainEventPublisher.publish(drinksServed);
-        // TODO apply
     }
 
     private boolean areDrinksOutstanding(List<Integer> menuNumbers) {
@@ -99,7 +89,6 @@ public class VisitFacade implements Aggregate {
         VisitClosed visitClosed = new VisitClosed(c.getVisitId(), c.getAmountPaid(), servedItemsValue, tipValue);
 
         domainEventPublisher.publish(visitClosed);
-        // TODO apply
     }
 
 
