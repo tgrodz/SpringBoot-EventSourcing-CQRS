@@ -1,15 +1,15 @@
-package com.cqrs.restaurant.domain.tab;
+package com.cqrs.restaurant.domain.visit;
 
-public class CloseTab {
+public class CloseVisit {
     private String tabId;
     private Double amountPaid;
 
-    public CloseTab(String tabId, Double amountPaid) {
+    public CloseVisit(String tabId, Double amountPaid) {
         this.tabId = tabId;
         this.amountPaid = amountPaid;
     }
 
-    public String getTabId() {
+    public String getVisitId() {
         return tabId;
     }
 

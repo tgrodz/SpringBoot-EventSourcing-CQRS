@@ -1,11 +1,11 @@
-package com.cqrs.restaurant.domain.tab;
+package com.cqrs.restaurant.domain.visit;
 
-public class OpenTab {
+public class OpenVisit {
     private String id;
     private int tableNumber;
     private String waiter;
 
-    public OpenTab(String id, int tableNumber, String waiter) {
+    public OpenVisit(String id, int tableNumber, String waiter) {
         this.id = id;
         this.tableNumber = tableNumber;
         this.waiter = waiter;

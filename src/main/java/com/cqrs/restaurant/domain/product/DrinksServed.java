@@ -19,7 +19,7 @@ public class DrinksServed implements DomainEvent {
 
     @Override
     public Date occurredOn() {
-        return null;
+        return occurredOn;
     }
 
     public String getTabId() {

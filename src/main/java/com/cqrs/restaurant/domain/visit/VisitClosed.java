@@ -1,20 +1,20 @@
-package com.cqrs.restaurant.domain.tab;
+package com.cqrs.restaurant.domain.visit;
 
 import com.cqrs.restaurant.domain.DomainEvent;
 
 import java.util.Date;
 
-public class TabClosed implements DomainEvent {
+public class VisitClosed implements DomainEvent {
 
     private Date occurredOn;
-    private String tabId;
+    private String visitId;
     private Double amountPaid;
     private Double orderValue;
     private Double tipValue;
 
-    TabClosed(String tabId, Double amountPaid, Double orderValue, Double tipValue) {
+    VisitClosed(String visitId, Double amountPaid, Double orderValue, Double tipValue) {
         this.occurredOn = new Date();
-        this.tabId = tabId;
+        this.visitId = visitId;
         this.amountPaid = amountPaid;
         this.orderValue = orderValue;
         this.tipValue = tipValue;
@@ -26,7 +26,7 @@ public class TabClosed implements DomainEvent {
     }
 
     public String tabId() {
-        return tabId;
+        return visitId;
     }
 
     public Double getAmountPaid() {
@@ -46,17 +46,17 @@ public class TabClosed implements DomainEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TabClosed tabClosed = (TabClosed) o;
+        VisitClosed visitClosed = (VisitClosed) o;
 
-        if (!tabId.equals(tabClosed.tabId)) return false;
-        if (!amountPaid.equals(tabClosed.amountPaid)) return false;
-        if (!orderValue.equals(tabClosed.orderValue)) return false;
-        return tipValue.equals(tabClosed.tipValue);
+        if (!visitId.equals(visitClosed.visitId)) return false;
+        if (!amountPaid.equals(visitClosed.amountPaid)) return false;
+        if (!orderValue.equals(visitClosed.orderValue)) return false;
+        return tipValue.equals(visitClosed.tipValue);
     }
 
     @Override
     public int hashCode() {
-        int result = tabId.hashCode();
+        int result = visitId.hashCode();
         result = 31 * result + amountPaid.hashCode();
         result = 31 * result + orderValue.hashCode();
         result = 31 * result + tipValue.hashCode();

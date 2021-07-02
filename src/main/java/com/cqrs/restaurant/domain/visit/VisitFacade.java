@@ -1,4 +1,4 @@
-package com.cqrs.restaurant.domain.tab;
+package com.cqrs.restaurant.domain.visit;
 
 import com.cqrs.restaurant.domain.product.DrinksOrdered;
 import com.cqrs.restaurant.domain.product.FoodOrdered;
@@ -7,38 +7,50 @@ import com.cqrs.restaurant.domain.order.PlaceOrder;
 import com.cqrs.restaurant.domain.Aggregate;
 import com.cqrs.restaurant.domain.DomainEventPublisher;
 import com.cqrs.restaurant.domain.order.OrderItem;
+import com.cqrs.restaurant.domain.vo.Address;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Tab implements Aggregate {
-
+//Root Aggregate
+public class VisitFacade implements Aggregate {
+    private String visitId;
     private DomainEventPublisher domainEventPublisher;
     private boolean open = false;
     private List<OrderItem> outstandingDrinks = new ArrayList<>();
     private Double servedItemsValue = 0.0;
+    private Address address;
 
-    Tab(DomainEventPublisher domainEventPublisher) {
+    VisitFacade(DomainEventPublisher domainEventPublisher) {
         this.domainEventPublisher = domainEventPublisher;
     }
 
-    //
-    // Handle Commands
-    //
+    @Override
+    public void setRootId(Object id) {
+        if (id instanceof String) this.visitId = (String) id;
+        else throw new RuntimeException("Wrong type Id! The type must be String");
+    }
 
-    void handle(OpenTab c) {
-        TabOpened tabOpened = new TabOpened(
+    @Override
+    public Object getRootId(Object id) {
+        return visitId;
+    }
+
+    //--------- Handle Commands -------------
+
+    void handle(OpenVisit c) {
+        VisitOpened visitOpened = new VisitOpened(
                 c.getId(),
                 c.getTableNumber(),
                 c.getWaiter());
 
-        domainEventPublisher.publish(tabOpened);
-        apply(tabOpened);
+        domainEventPublisher.publish(visitOpened);
+        apply(visitOpened);
     }
 
     void handle(PlaceOrder c) {
-        if (!open) throw new TabNotOpen("Tab can't open");
+        if (!open) throw new VisitNotOpen("Visit can't open");
 
         List<OrderItem> drinks = c.getItems().stream()
                 .filter(OrderItem::isDrink)
@@ -69,7 +81,7 @@ public class Tab implements Aggregate {
             throw new DrinksNotOutstanding();
         }
 
-        DrinksServed drinksServed = new DrinksServed(c.getTabId(), c.getMenuNumbers());
+        DrinksServed drinksServed = new DrinksServed(c.getVisitId(), c.getMenuNumbers());
 
         domainEventPublisher.publish(drinksServed);
         // TODO apply
@@ -82,19 +94,17 @@ public class Tab implements Aggregate {
         return outstandingDrinkNumbers.containsAll(menuNumbers);
     }
 
-    void handle(CloseTab c) {
+    void handle(CloseVisit c) {
         Double tipValue = c.getAmountPaid() - servedItemsValue;
-        TabClosed tabClosed = new TabClosed(c.getTabId(), c.getAmountPaid(), servedItemsValue, tipValue);
+        VisitClosed visitClosed = new VisitClosed(c.getVisitId(), c.getAmountPaid(), servedItemsValue, tipValue);
 
-        domainEventPublisher.publish(tabClosed);
+        domainEventPublisher.publish(visitClosed);
         // TODO apply
     }
 
-    //
-    // Apply Events
-    //
 
-    void apply(TabOpened e) {
+    // ------------- Apply Events ----------------
+    void apply(VisitOpened e) {
         this.open = true;
     }
 
@@ -109,4 +119,6 @@ public class Tab implements Aggregate {
             this.outstandingDrinks.remove(drink);
         }
     }
+
+
 }

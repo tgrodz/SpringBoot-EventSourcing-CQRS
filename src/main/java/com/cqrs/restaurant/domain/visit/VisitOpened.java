@@ -1,17 +1,17 @@
-package com.cqrs.restaurant.domain.tab;
+package com.cqrs.restaurant.domain.visit;
 
 import com.cqrs.restaurant.domain.DomainEvent;
 
 import java.util.Date;
 
-public class TabOpened implements DomainEvent {
+public class VisitOpened implements DomainEvent {
 
     private Date occurredOn;
     private String tabId;
     private int tableNumber;
     private String waiter;
 
-    TabOpened(String tabId, int tableNumber, String waiter) {
+    VisitOpened(String tabId, int tableNumber, String waiter) {
         this.occurredOn = new Date();
         this.tabId = tabId;
         this.tableNumber = tableNumber;
@@ -40,7 +40,7 @@ public class TabOpened implements DomainEvent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TabOpened tabOpened = (TabOpened) o;
+        VisitOpened tabOpened = (VisitOpened) o;
 
         if (tableNumber != tabOpened.tableNumber) return false;
         if (tabId != null ? !tabId.equals(tabOpened.tabId) : tabOpened.tabId != null) return false;

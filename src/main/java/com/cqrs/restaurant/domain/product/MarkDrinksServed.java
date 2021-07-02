@@ -12,7 +12,7 @@ public class MarkDrinksServed {
         this.menuNumbers = menuNumbers;
     }
 
-    public String getTabId() {
+    public String getVisitId() {
         return tabId;
     }
 
